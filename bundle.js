@@ -1,20 +1,22 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 let Phrase = require("zr-palindrome");
-function palindromeTester (){
-  let string = prompt("Please enter a string for palindrome testing:");
-  let phrase = new Phrase(string);
+function palindromeTester (event){
+  event.preventDefault();
+ 
+  let phrase = new Phrase( event.target.phrase.value);
+  let palindromeResult = document.querySelector("#palindromeResult");
   
   if (phrase.palindrome()){
-    alert(`"${phrase.content}" is a palindrome!`)
+    palindromeResult.innerHTML = `"<strong> ${phrase.content}" is a palindrome! </strong>`;
   } else {
-    alert(`"${phrase.content}" is not a palindrome.`)
+    palindromeResult.innerHTML = `"${phrase.content}" is not a palindrome.`;
   }
 }
 
 document.addEventListener("DOMContentLoaded", function(){
-  let button = document.querySelector("#palindromeTester");
-  button.addEventListener("click", () => {
-    palindromeTester();
+  let form = document.querySelector("#palindromeTester");
+  form.addEventListener("submit", (event) => {   
+    palindromeTester(event);
   });
   
 });
@@ -31,9 +33,9 @@ String.prototype.reverse = function reverse(){
 
 function Phrase(content){
   this.content = content;
-  
+
   this.letters = function letters(){
-   let lettersRegex = /[a-z]/gi;
+   const lettersRegex = /[a-z]/gi;
     return (this.content.match(lettersRegex) || []).join("");
   }
 
@@ -42,7 +44,11 @@ function Phrase(content){
   }
   
   this.palindrome = function palindrome(){
-     return this.processedContent() === (this.processedContent()).reverse();
+    if(this.letters()){
+      return this.processedContent() === (this.processedContent()).reverse();
+    } else {
+      return false;
+    }
   } 
 }
 
